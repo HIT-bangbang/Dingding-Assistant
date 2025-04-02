@@ -19,9 +19,20 @@ PlatformIO + arduino
 * esp32
 * esp32-C3
 
+## 如何获取mac地址和RAW广播数据
+
+1. 下载APP `nRF Connect`
+![](./img/图标.jpg)
+2. 打开APP，扫描当前环境中的蓝牙
+3. 钉钉打卡机的蓝牙一般叫 `RTK_BT_**`，不过也不一定。然后公司的名称是 `TomTom **`，符合这两个特征的基本就是了
+![](./img/mac地址.jpg)
+4. 将mac地址（蓝牙名称下面的那6位数字）填入 `main.cpp` 中对应的数组中
+5. 点击`RAW` 查看广播的RAW数据，将raw数据也填入 `main.cpp` 中对应的数组中。
+![](./img/raw数据.jpg)
+
 ## 配置方法和参考链接
 
-蓝牙地址和广播数据查询、更改请参考这位哥们儿的仓库：
+蓝牙地址和广播数据查询、可以参考这位哥们儿的仓库：
 
 https://github.com/skysilksock/dingding
 
