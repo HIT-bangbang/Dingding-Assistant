@@ -4,6 +4,8 @@
 #include "esp_sleep.h"
 #include "BLEBeacon.h"
 #define BEACON_UUID           "8ec76ea3-6668-48da-9866-75be8bc86f4d" // UUID 1 
+#define digitalToggle(x) digitalWrite(x, !digitalRead(x))
+
 
 BLEAdvertising *pAdvertising;
 
@@ -11,17 +13,21 @@ BLEAdvertising *pAdvertising;
 // uint8_t bleMac[6] = {0x6E, 0x42, 0x4F, 0x0E, 0x6E, 0x61};
 uint8_t bleMac[6] = {0x40, 0xF4, 0xC9, 0x76, 0x8A, 0xB3};
 
-/*
-0x02010617FF0001B50002737D1A4A0000049F9111EBA6011000000003033CFE0C0952544B5F42545F342E3100
-*/
+// 02, 01, 06, 17, FF,
+// 00, 01, B5, 00, 02,
+// 07, 49, 92, 1E, 00,
+// 00, 04, 9F, C2, 42,
+// 54, 9F, 01, 10, 00,
+// 00, 00, 03, 03, 3C, FE
+// 0C 09 52 54 4B 5F 42 54 5F 34 2E 31 00
 
 // 0-30 前31组
 uint8_t bleRaw[31] = {
     0x02, 0x01, 0x06, 0x17, 0xFF, 
     0x00, 0x01, 0xB5, 0x00, 0x02, 
-    0x73, 0x7D, 0x1A, 0x4A, 0x00, 
-    0x00, 0x04, 0x9F, 0xD9, 0x6C, 
-    0x55, 0x17, 0x01, 0x10, 0x00, 
+    0x07, 0x49, 0x92, 0x1E, 0x00, 
+    0x00, 0x04, 0x9F, 0xC2, 0x42, 
+    0x54, 0x9F, 0x01, 0x10, 0x00, 
     0x00, 0x00, 0x03, 0x03, 0x3C, 0xFE
 };
 // 如果raw超过31组 那么把它改为true并维护下面的数组，填入31位之后的raw数据
@@ -61,6 +67,9 @@ class MyCallbacks : public BLECharacteristicCallbacks {
 };
 
 void setup() {
+  pinMode(12, OUTPUT);
+  pinMode(13, OUTPUT);
+
   Serial.begin(115200); // 初始化串口
   delay(2000);
 
@@ -142,10 +151,19 @@ void setup() {
 
 void loop() {
   // 闪灯灯 至于为什么是串口输出，因为并没有内置led，但拥有串口指示灯
-  Serial.println("Sparkle");
-  delay(1000);
-  // 20分钟去待机避免忘了关
-  if (millis() > 1200000) {
-    esp_deep_sleep_start();
-  }
+    Serial.println("Sparkle");
+    // digitalToggle(12);
+    // digitalToggle(13);
+    // digitalWrite(12,HIGH);
+    // digitalWrite(13,LOW);
+    // delay(1000);
+    // digitalWrite(12,LOW);
+    // digitalWrite(13,HIGH);
+
+    delay(1000);
+
+// 20分钟去待机避免忘了关
+//   if (millis() > 1200000) {
+//     esp_deep_sleep_start();
+//   }
 }
